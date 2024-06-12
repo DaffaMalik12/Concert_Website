@@ -1,100 +1,71 @@
 <?php
 session_start();
 include '../../../Config/config.php'; // Sesuaikan jalur ke file konfigurasi Anda
-require_once('tcpdf/tcpdf.php'); // Include file TCPDF
+require_once('fpdf185/fpdf.php'); // Include file FPDF
 
 // Ambil id_konser dari parameter URL
-$id_konser = isset($_GET['id_konser']) ? intval($_GET['id_konser']) : 107;
+$id_konser = isset($_GET['id_konser']) ? intval($_GET['id_konser']) : 0; // sesuaikan dengan id_konser ketika dipesan (lihat di database)
 $ticketData = null; // Inisialisasi $ticketData
 
 // Periksa apakah id_konser valid
-if ($id_konser >= 107) {
-
-    $sql = "SELECT * FROM konser_table WHERE id_konser >= $id_konser";
+if ($id_konser > 0) { // sesuaikan dengan id_konser ketika dipesan (lihat di database)
+    // Ambil data dari database berdasarkan id_konser
+    $sql = "SELECT * FROM konser_table WHERE id_konser = $id_konser";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         // Ambil hanya baris pertama
         $ticketData = $result->fetch_assoc();
     } else {
-        echo "0 results";
+        echo "No results found.";
+        exit;
     }
 
     $conn->close();
 } else {
-    echo "Invalid id_konser";
+    echo "Invalid id_konser.";
+    exit;
 }
 
 // Jika tombol unduh ditekan
 if (isset($_POST['download_pdf'])) {
-    // Buat instance TCPDF
-    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-
-    // Atur informasi dokumen
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('Santi');
-    $pdf->SetTitle('Tiket Konser');
-    $pdf->SetSubject('Tiket Konser');
-    $pdf->SetKeywords('Tiket, Konser');
-
-    // Atur font
-    $pdf->SetFont('helvetica', '', 12);
-
-    // Tambahkan halaman baru
+    // Buat instance FPDF
+    $pdf = new FPDF('P', 'mm', 'A4');
     $pdf->AddPage();
 
-    // Tambahkan konten ke PDF
-    $content = '
-    <style>
-        .ticket-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .ticket-header {
-            text-align: center;
-            color: red;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .ticket-details {
-            margin-top: 20px;
-        }
-        .ticket-details p {
-            margin: 5px 0;
-            color: black;
-        }
-        .ticket-qr {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .ticket-qr img {
-            width: 128px;
-            height: 128px;
-        }
-    </style>
-    <div class="ticket-container">
-        <div class="ticket-header">Cetak Tiket</div>
-        <div class="ticket-details">';
-    if ($ticketData) {
-        $content .= '<p>Nama Konser: ' . $ticketData["nama_konser"] . '</p>';
-        $content .= '<p>Tanggal Event: ' . $ticketData["tanggal_event"] . '</p>';
-        $content .= '<p>Kelas: ' . $ticketData["kelas"] . '</p>';
+    // Tambahkan gambar latar belakang
+    $backgroundPath = '../../asset/img/Landing Page User Bg.png'; // Sesuaikan jalur gambar latar belakang Anda
+    if (file_exists($backgroundPath)) {
+        $pdf->Image($backgroundPath, 10, 10, 190, 50);
     } else {
-        $content .= '<p>No ticket data available.</p>';
+        echo "Background image not found.";
+        exit;
     }
-    $content .= '</div>
-    </div>';
 
-    $pdf->writeHTML($content, true, false, true, false, '');
+    // Tambahkan konten ke PDF
+    $pdf->SetXY(15, 15); // Atur posisi X dan Y
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(120, 10, $ticketData["nama_konser"], 0, 1);
+
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->SetXY(15, 25); // Atur posisi X dan Y
+    $pdf->Cell(120, 10, $ticketData["tanggal_event"], 0, 1);
+
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->SetXY(15, 35); // Atur posisi X dan Y
+    $pdf->Cell(120, 10, 'Kelas: ' . $ticketData["kelas"], 0, 1);
+
+    // Tambahkan QR code ke PDF jika ada
+    $qrCodePath = '../../asset/img/QR CODE_qrcode.png'; // Sesuaikan jalur gambar QR code Anda
+    if (file_exists($qrCodePath)) {
+        $pdf->Image($qrCodePath, 150, 15, 40, 40);
+    }
 
     // Output PDF ke browser atau simpan ke file
-    $pdf->Output('tiket_konser.pdf', 'D');
+    $pdf->Output('D', 'tiket_konserJKT.pdf');
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 

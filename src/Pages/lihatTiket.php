@@ -1,61 +1,35 @@
 <?php
 session_start();
 include '../../Config/config.php'; // Sesuaikan jalur ke file konfigurasi Anda
-require_once('tcpdf/tcpdf.php'); // Sesuaikan jalur ke file TCPDF Anda
+require_once('display/fpdf185/fpdf.php'); // Sesuaikan jalur ke file FPDF Anda
 
 // Fungsi untuk membuat dan mengunduh PDF
 function downloadPDF($ticketData)
 {
-    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-
-    // Atur informasi dokumen
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('Santi');
-    $pdf->SetTitle('Tiket Konser');
-    $pdf->SetSubject('Tiket Konser');
-    $pdf->SetKeywords('Tiket, Konser');
-
-    // Atur font
-    $pdf->SetFont('helvetica', '', 12);
-
-    // Tambahkan halaman baru
+    $pdf = new FPDF('P', 'mm', 'A4');
     $pdf->AddPage();
 
-    // Tambahkan konten ke PDF
-    $content = '
-    <style>
-        .ticket-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .ticket-header {
-            text-align: center;
-            color: red;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .ticket-details {
-            margin-top: 20px;
-        }
-        .ticket-details p {
-            margin: 5px 0;
-            color: black;
-        }
-    </style>
-    <div class="ticket-container">
-        <div class="ticket-header">Cetak Tiket</div>
-        <div class="ticket-details">';
-    $content .= '<p>Nama Konser: ' . $ticketData["nama_konser"] . '</p>';
-    $content .= '<p>Tanggal Event: ' . $ticketData["tanggal_event"] . '</p>';
-    $content .= '<p>Kelas: ' . $ticketData["kelas"] . '</p>';
-    $content .= '</div></div>';
+    // Add a card-like rectangle with an image background
+    $pdf->Image('../asset/img/Landing Page User Bg.png', 10, 10, 190, 50); // Sesuaikan jalur gambar Anda
 
-    $pdf->writeHTML($content, true, false, true, false, '');
+    // Add content to the card
+    $pdf->SetXY(15, 15);
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(120, 10, $ticketData["nama_konser"], 0, 1); // Adjusted width to leave space for QR code
 
-    // Output PDF ke browser
-    $pdf->Output('tiket_konser.pdf', 'I');
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->SetXY(15, 25);
+    $pdf->Cell(120, 10, $ticketData["tanggal_event"], 0, 1); // Adjusted width to leave space for QR code
+
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->SetXY(15, 35);
+    $pdf->Cell(120, 10, 'Kelas: ' . $ticketData["kelas"], 0, 1); // Adjusted width to leave space for QR code
+
+    // Add QR code image
+    $pdf->Image('../asset/img/QR CODE_qrcode.png', 150, 15, 40, 40); // Sesuaikan jalur gambar QR code Anda
+
+    // Output PDF to browser
+    $pdf->Output('I', 'tiket_konser.pdf');
     exit;
 }
 
@@ -76,8 +50,8 @@ if (isset($_POST['download_pdf'])) {
 // Ambil semua data tiket dari database
 $sql = "SELECT * FROM konser_table";
 $result = $conn->query($sql);
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,6 +61,7 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lihat Tiket</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="display/fpdf186/fpdf.css       ">
 </head>
 
 <body>
