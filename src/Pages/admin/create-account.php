@@ -17,10 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
   $username = $_POST['username'];
 
-  $sql = "INSERT INTO user_table (username, password, email) VALUES ('$username', '$password','$email')";
+  $sql = "INSERT INTO admin_table (username, password, email) VALUES ('$username', '$password','$email')";
 
   if ($conn->query($sql) === TRUE) {
-    echo "Data berhasil disimpan ke database.";
+    // echo "Data berhasil disimpan ke database.";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
@@ -30,72 +30,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create account</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="public/assets/css/tailwind.output.css" />
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <script src="public/assets/js/init-alpine.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 
-<body>
-  <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
-    <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
-      <div class="flex flex-col overflow-y-auto md:flex-row">
-        <div class="h-32 md:h-auto md:w-1/2">
-          <img aria-hidden="true" class="object-cover w-full h-full dark:hidden" src="public/assets/img/create-account-office.jpeg" alt="Office" />
-          <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block" src="public/assets/img/create-account-office-dark.jpeg" alt="Office" />
-        </div>
-        <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-          <div class="w-full">
-            <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-              Create account
-            </h1>
-            <formx method="POST" action="create-account.php">
-              <label class="block text-sm">
-                <span for="email" class="text-gray-700 dark:text-gray-400">Email</span>
-                <input name="email" id="email" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="youremail@gmail.com" />
-              </label>
-              <label class="block mt-4 text-sm">
-                <span for="username" class="text-gray-700 dark:text-gray-400">Username</span>
-                <input name="username" id="username" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Username" type="text" />
-              </label>
-              <label class="block mt-4 text-sm">
-                <span for="password" class="text-gray-700 dark:text-gray-400">
-                  password
-                </span>
-                <input name="password" id="password" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="***************" type="password" />
-              </label>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="flex bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl w-full">
+    <!-- Gambar di samping form -->
+    <div class="w-1/2 hidden md:block">
+      <img src="https://images.unsplash.com/photo-1593642532871-8b12e02d091c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Sample Image" class="object-cover h-full w-full">
+    </div>
 
-              <div class="flex mt-6 text-sm">
-                <label class="flex items-center dark:text-gray-400">
-                  <input type="checkbox" class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" />
-                  <span class="ml-2">
-                    I agree to the
-                    <span class="underline">privacy policy</span>
-                  </span>
-                </label>
-              </div>
-
-
-              <!-- Form elements -->
-              <button type="submit" onclick="alert('Akun Berhasil Didaftarkan')" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                Create account
-              </button>
-            </formx>
-
-            <hr class="my-8" />
-            <p class="mt-4">
-              <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline" href="login.html">
-                Already have an account? Login
-              </a>
-            </p>
+    <!-- Form Pendaftaran -->
+    <div class="w-full md:w-1/2 p-6">
+      <div class="backdrop-blur-sm bg-white/30 rounded-lg">
+        <form class="space-y-6" method="POST" action="create-account.php">
+          <h1 class="font-bold text-2xl">Create Account</h1>
+          <div>
+            <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
+            <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Username" required>
           </div>
-        </div>
+          <div>
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
+          </div>
+          <div>
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+            <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
+          </div>
+          <div>
+            <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-900">Konfirmasi Password</label>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
+          </div>
+          <div class="flex flex-col justify-start"></div>
+          <button type="submit" onclick="alert('Akun Berhasil Didaftarkan')" class="w-full bg-blue-600 text-white bg-slate-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Register</button>
+          <p class="text-sm font-light text-gray-500">Have an account yet? <a href="login.php" class="font-medium text-primary-600 hover:underline">Login</a></p>
+        </form>
       </div>
     </div>
   </div>
