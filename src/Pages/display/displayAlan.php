@@ -56,7 +56,7 @@ if (isset($_POST['download_pdf'])) {
     $pdf->Cell(120, 10, 'Kelas: ' . $ticketData["kelas"], 0, 1);
 
     // Tambahkan QR code ke PDF jika ada
-    $qrCodePath = '../../asset/img/QR CODE_qrcode.png'; // Sesuaikan jalur gambar QR code Anda
+    $qrCodePath = '../../asset/img/QR_CODE_TIKET_qrcode.png'; // Sesuaikan jalur gambar QR code Anda
     if (file_exists($qrCodePath)) {
         $pdf->Image($qrCodePath, 150, 15, 40, 40);
     }
@@ -102,7 +102,7 @@ if (isset($_POST['download_pdf'])) {
                     </div>
                 </div>
                 <div class="flex items-center justify-center ml-4">
-                    <img src="../../asset/img/QR CODE_qrcode.png" alt="QR Code" class="h-32 w-32">
+                    <img src="../../asset/img/QR_CODE_TIKET_qrcode.png" alt="QR Code" class="h-32 w-32">
                 </div>
             </div>
             <!-- Form untuk tombol unduh -->
