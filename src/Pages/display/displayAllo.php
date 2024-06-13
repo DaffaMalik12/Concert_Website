@@ -3,29 +3,31 @@ session_start();
 include '../../../Config/config.php'; // Sesuaikan jalur ke file konfigurasi Anda
 require_once('fpdf185/fpdf.php'); // Include file FPDF
 
-// Ambil id_konser dari parameter URL
-$id_konser = isset($_GET['id_konser']) ? intval($_GET['id_konser']) : 0; // sesuaikan dengan id_konser ketika dipesan (lihat di database)
-$ticketData = null; // Inisialisasi $ticketData
+// Ambil id_konser terbesar dari database
+$sql = "SELECT MAX(id_konser) AS max_id FROM konser_table";
+$result = $conn->query($sql);
 
-// Periksa apakah id_konser valid
-if ($id_konser > 0) { // sesuaikan dengan id_konser ketika dipesan (lihat di database)
-    // Ambil data dari database berdasarkan id_konser
-    $sql = "SELECT * FROM konser_table WHERE id_konser = $id_konser";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        // Ambil hanya baris pertama
-        $ticketData = $result->fetch_assoc();
-    } else {
-        echo "No results found.";
-        exit;
-    }
-
-    $conn->close();
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $id_konser = $row['max_id'];
 } else {
-    echo "Invalid id_konser.";
+    echo "No concerts found.";
     exit;
 }
+
+// Ambil data dari database berdasarkan id_konser terbesar
+$sql = "SELECT * FROM konser_table WHERE id_konser = $id_konser";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Ambil hanya baris pertama
+    $ticketData = $result->fetch_assoc();
+} else {
+    echo "No results found.";
+    exit;
+}
+
+$conn->close();
 
 // Jika tombol unduh ditekan
 if (isset($_POST['download_pdf'])) {
@@ -62,7 +64,7 @@ if (isset($_POST['download_pdf'])) {
     }
 
     // Output PDF ke browser atau simpan ke file
-    $pdf->Output('D', 'tiket_konserJKT.pdf');
+    $pdf->Output('D', 'tiket_konserAllo.pdf');
     exit;
 }
 ?>
