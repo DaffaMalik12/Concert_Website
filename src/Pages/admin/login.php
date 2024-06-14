@@ -17,20 +17,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verify the password
     if (password_verify($password, $row['password'])) {
       $_SESSION['username'] = $username;
+      // Debugging: memastikan redirect
+      error_log("Login berhasil, redirecting...");
       // Redirect to home.php
       header("Location: public/index.php");
       exit();
     } else {
       $error = "Invalid password";
+      error_log($error); // Debugging
     }
   } else {
     $error = "No user found";
+    error_log($error); // Debugging
   }
 
   $stmt->close();
   $conn->close();
+} else {
+  error_log("Request method is not POST"); // Debugging
 }
 ?>
+
 <!DOCTYPE html>
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
@@ -54,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block" src="public/assets/img/login-office-dark.jpeg" alt="Office" />
         </div>
         <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-          <form action="">
+          <form action="login.php" method="POST">
             <div class="w-full">
               <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                 Login
