@@ -113,7 +113,13 @@ $result = $conn->query($sql);
               <ul x-transition:enter="transition-all ease-in-out duration-300" x-transition:enter-start="opacity-25 max-h-0" x-transition:enter-end="opacity-100 max-h-xl" x-transition:leave="transition-all ease-in-out duration-300" x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0" class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900" aria-label="submenu">
 
                 <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                  <a class="w-full" href="./blank.html">Blank</a>
+                  <a class="w-full" href="./blank.html">Laporan</a>
+                </li>
+                <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                  <a class="w-full" href="akun_admin.php">Akun Admin</a>
+                </li>
+                <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                  <a class="w-full" href="akun_user.php">Akun User</a>
                 </li>
               </ul>
             </template>
@@ -145,7 +151,7 @@ $result = $conn->query($sql);
 
             <!-- Add this classes to an active anchor (a tag) -->
             <!-- text-gray-800 dark:text-gray-100 -->
-            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="../index.html">
+            <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200" href="../index.php">
               <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
               </svg>
@@ -357,8 +363,8 @@ $result = $conn->query($sql);
           </ul>
         </div>
       </header>
-      <main class="h-full pb-16 overflow-y-auto flex justify-center items-center">
 
+      <main class="h-full pb-16 overflow-y-auto flex justify-center items-center">
         <!-- Remove everything INSIDE this div to a really blank page -->
         <!-- Tabel -->
         <div class="container px-6 mx-auto grid">
@@ -404,8 +410,9 @@ $result = $conn->query($sql);
             </table>
           </div>
         </div>
-
       </main>
+
+
     </div>
   </div>
 </body>
